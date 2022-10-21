@@ -1,14 +1,11 @@
 // Лабораторная 1
 // Перевести узлы в километры в час и выразить в метрах в секунду
 #include <iostream>
-#include <Windows.h>
 
 using namespace std;
 
 int main() {
 
-    SetConsoleOutputCP(CP_UTF8);
-    SetConsoleCP(CP_UTF8);
     cout << "Введите количество узлов:";
     cin >> knots;
     // 1 узел = 1.852 км/ч
@@ -22,14 +19,10 @@ int main() {
 // которая вычисляет среднее арифметическое элементов массива без учета минимального и максимального элементов массива.
 // Массив и его длина вводятся пользователем.
 #include <iostream>
-#include <Windows.h>
 
 using namespace std;
 
 int main() {
-
-    SetConsoleOutputCP(CP_UTF8);
-    SetConsoleCP(CP_UTF8);
 
     int charArrayLength;
     cout << "Укажите количество элементов в массиве:";
@@ -62,4 +55,51 @@ int main() {
     }
 
     cout << double(sum) / double(counter);
+}
+
+
+// Лабораторная 3
+// Написать программу, которая во вводимом с клавиатуры тексте выберет слова, начинающиеся с гласной буквы, и выведет их на экран. 
+
+#include <iostream>
+
+using namespace std;
+
+int main() {
+       
+    char text[1024];
+    cin.get(text, 1024);
+    for (int i = 0; i < 1024; i++) {
+        int temp = (int)text[i];
+        if (text[i] == '\0') {
+            break;
+        }
+
+        if ((temp <= -97 && temp >= -128) || (temp <= 90 && temp >= 65)) {
+            
+            while (text[i] != ' ') {
+
+                if (text[i] == '\0') {
+                    break;
+                }
+                cout << text[i];
+                i++;
+            }
+            
+            cout << " ";
+        }
+
+        else {
+            while (text[i] != ' ') {
+
+                if (text[i] == '\0') {
+                    break;
+                }
+                i++;
+                continue;
+            }
+        }
+
+    }
+    // -128 --- -97 (А-Я)   65 --- 90 (A-Z)
 }
