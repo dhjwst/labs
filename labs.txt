@@ -1,71 +1,65 @@
-// Выполняется первый вариант всех заданий
 // Лабораторная 1
-// Перевести версты в сажени и выразить в сантиметрах.
-
+// Перевести узлы в километры в час и выразить в метрах в секунду
 #include <iostream>
+#include <Windows.h>
+
 using namespace std;
 
 int main() {
-    // Объявляем переменную a, в которую запишем количество верст
-    float a;
-    cout << "Set the number of versts:";
-    cin >> a;
 
-    // Отрывок со страницы на википедии:
-    // "Верста́ (по древнему правописанию: връста)[2] — русская единица измерения расстояния, равная пятистам саженям..."
-    // Статья доступна по следующей ссылке: https://ru.wikipedia.org/wiki/%D0%92%D0%B5%D1%80%D1%81%D1%82%D0%B0
-
-    // Переведём версты в сажени, умножив количество верстов на 500.
-    cout << "Fathoms:" << a * 500 << "\n";
-
-    // Отрывок со страницы на википедии:
-    // "1 сажень = 7 английских футов = 84 дюйма = 2,1336 метра."
-    // Статья доступна по следующей ссылке: https://ru.wikipedia.org/wiki/%D0%A1%D0%B0%D0%B6%D0%B5%D0%BD%D1%8C
-    // Исходя из того, что 1 сажень = 2,1336 метра мы можем выразить его количество в сантиметрах.
-    // 2,1336 * 100 (в 1 метре 100 сантиметров) = 213,36 см
-
-    // Переведём сажени в сантиметры, умножив количество саженей на 213,36
-    cout << "Centimeters:" << a * 213.36;
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+    cout << "Введите количество узлов:";
+    cin >> knots;
+    // 1 узел = 1.852 км/ч
+    cout << "Ответ." << endl;
+    printf("%f км/ч, %f м/с", (float)knots * 1.852, ((float)knots * 1.852 * 1000.0) / 3600.0);
 
 }
 
-
-
 // Лабораторная 2
-// Написать программу, которая вычисляет, сколько раз введенное с клавиатуры число встречается в массиве.
+// Написать программу,
+// которая вычисляет среднее арифметическое элементов массива без учета минимального и максимального элементов массива.
 // Массив и его длина вводятся пользователем.
-
 #include <iostream>
+#include <Windows.h>
+
 using namespace std;
 
 int main() {
-    // Объявим массив a, в который запишем количество эллементов массива
-    int n;
-    cout << "Set array length:";
-    cin >> n;
-    int a[n];
 
-    for (int i = 0; i < n; i++) {
-        cout << "Set value" << "(" << i+1 << "/" << n << ")" << ":";
-        int temp;
-        cin >> temp;
-        a[i] = temp;
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+
+    int charArrayLength;
+    cout << "Укажите количество элементов в массиве:";
+    cin >> charArrayLength;
+
+    // задание элементов в массив
+    int nums[charArrayLength];
+    for (int i = 0; i < charArrayLength; i++) {
+        cout << "Введите число для элемента №" << i+1 << ":";
+        cin >> nums[i];
     }
 
-    // Объявим переменную b, в которой запишем число для поиска совпадений в массиве
-    // Так же создадим переменную counter и будем прибавлять к ней по единичке, в том случае
-    // если b будет равно эллементу в массиве
-    int b;
-    int counter;
-    cout << "Set number to search for:";
-    cin >> b;
-
-    for (int i = 0; i < n; i++) {
-        if (a[i] == b) {
-            counter++;
+    // поиск минимального и максимального элемента
+    int minElement = nums[0], maxElement = nums[0];
+    for (int i = 0; i < charArrayLength; i++) {
+        if (nums[i] < minElement) {
+            minElement = nums[i];
+        }
+        if (nums[i] > maxElement) {
+            maxElement = nums[i];
         }
     }
 
-    cout << "Matches found:" << counter;
+    int sum, counter;
+    for (int i = 0; i < charArrayLength; i++) {
+        if (nums[i] != minElement && nums[i] != maxElement) {
+            counter++;
+            sum += nums[i];
+        }
+    }
 
+    cout << double(sum) / double(counter);
 }
