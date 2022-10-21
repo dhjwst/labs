@@ -54,7 +54,7 @@ int main() {
         }
     }
 
-    cout << double(sum) / double(counter);
+    cout << "Ответ." << endl << double(sum) / double(counter);
 }
 
 
@@ -66,9 +66,12 @@ int main() {
 using namespace std;
 
 int main() {
-       
+    
     char text[1024];
+    cout << "Введите текст.\nПоддерживаются русские и английские символы\nДля ввода доступно не более 1024 символов\n";
     cin.get(text, 1024);
+    cout << endl;
+    cout << "Ответ." << endl;
     for (int i = 0; i < 1024; i++) {
         int temp = (int)text[i];
         if (text[i] == '\0') {
