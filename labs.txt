@@ -199,3 +199,113 @@ void main() {
         fclose(inputFile);
     }
 }
+
+
+
+
+
+// Лабораторная работа 5.
+// Написать программу, которая записывает с клавиатуры в файл структуру согласно выданному варианту задания. 
+// В качестве разделителя полей структуры использовать символ табуляции. В программе реализовать:
+// а) дополнение существующего массива структур новыми структурами;
+// б) поиск структуры с заданным значением выбранного элемента;
+// в) вывод на экран содержимого массива структур;
+// г) упорядочение массива структур по заданному полю(элементу), например государство по численности.
+// «Покупатель»: фамилия, имя, отчество, город, улица, номер дома, номер квартиры, номер кредитной карточки, код покупки. 
+
+
+
+#include <iostream>
+#include <Windows.h>
+
+using namespace std;
+
+struct Buyer {
+
+    char lastName[32];
+    char name[32];
+    char patronymic[32];
+    char city[32];
+    char street[128];
+    char creditCardNumber[16];
+    int houseNumber;
+    int roomNumber;
+    int buyCode;
+
+};
+
+void getFileDate() {
+
+    FILE* databaseFile;
+
+    fopen_s(&databaseFile, "database.txt", "r");
+
+    if (databaseFile == NULL) {
+        cout << "Ошибка, не найден(ы) файл(ы) для работы программы!";
+    } else {
+        
+    }
+
+        
+}
+
+void addNewElement() {
+    Buyer buyer = {};
+
+    cout << "Введите фамилию:\n";
+    cin.getline(buyer.lastName, 32);
+    cin.ignore();
+
+    cout << "Введите имя:\n";
+    cin.getline(buyer.name, 32);
+    cin.ignore();
+
+    cout << "Введите отчество:\n";
+    cin.getline(buyer.patronymic, 32);
+    cin.ignore();
+
+    cout << "Введите город:\n";
+    cin.getline(buyer.city, 32);
+    cin.ignore();
+
+    cout << "Введите улицу:\n";
+    cin.getline(buyer.street, 32);
+    cin.ignore();
+
+    cout << "Введите номер карточки:\n";
+    cin.getline(buyer.creditCardNumber, 16);
+    cin.ignore();
+
+    cout << "Введите номер дома:\n";
+    cin >> buyer.houseNumber;
+
+    cout << "Введите номер квартиры:\n";
+    cin >> buyer.roomNumber;
+
+    cout << "Введите номер покупки:\n";
+    cin >> buyer.buyCode;
+    cin.ignore();
+}
+
+int main() {
+
+    SetConsoleOutputCP(1251);
+    SetConsoleCP(1251);
+
+    while (true) {
+
+        int action;
+        cout << "Выберите действие:\n1) Вывести содержимое базы данных\n2) Добавить новый элемент в базу данных\n3) Отсортировать элементы по определённому параметру\n";
+        cin >> action;
+
+        switch (action) {
+            case 1:
+                addNewElement();
+                break;
+            default:
+                cout << "Действие не найдено!\n";
+                break;
+        }
+
+    }
+}
