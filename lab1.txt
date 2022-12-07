@@ -10,7 +10,9 @@ int main() {
     SetConsoleOutputCP(1251);
     SetConsoleCP(1251);
 
-    cout << "Введите количество узлов:";
+    
+    cout << "Введите количество узлов:\n";
+    int knots;
     cin >> knots;
     // 1 узел = 1.852 км/ч
     cout << "Ответ." << endl;
