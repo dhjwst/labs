@@ -1,0 +1,76 @@
+// Лабораторная 4
+// Практическую часть к лабораторной работе 4 необходимо взять из лабораторной работы 3, дополнив ее некоторыми условиями:
+// • входными данными является файл;
+// • результаты работы записываются в другой файл;
+// • входные данные не ограничиваются одной строкой.
+
+
+#include <iostream>
+#include <Windows.h>
+
+using namespace std;
+
+void main() {
+
+    SetConsoleOutputCP(1251);
+    SetConsoleCP(1251);
+
+    cout << "Поддерживаются только русские и английские символы\nДля ввода доступно не более 1024 символов\nНачинаю сканировать файл...\n";
+
+    FILE* inputFile;
+    FILE* outputFile;
+
+    fopen_s(&inputFile, "input.txt", "r");
+    fopen_s(&outputFile, "output.txt", "a");
+
+    char* text = new char[1024];
+
+    if (inputFile == NULL || outputFile == NULL) {
+        cout << "Ошибка, не найден(ы) файл(ы) для работы программы!";
+    }
+
+    else {
+        char text[1024];
+        while (!feof(inputFile)) {
+
+            
+            fscanf_s(inputFile, "%[^\n]\n", text, 1024);
+
+
+            for (int i = 0, j = 0; i < 1024; i++) {
+                if (text[i] == '\0') {
+                    break;
+                }
+                // -128 --- -97 (А-Я)   65 --- 90 (A-Z)
+                if (((int)text[i] <= -97 && (int)text[i] >= -128) || ((int)text[i] <= 90 && (int)text[i] >= 65)) {
+
+                    while (text[i] != ' ') {
+
+                        if (text[i] == '\0') {
+                            break;
+                        }
+                        fputc(text[i], outputFile);
+
+                        i++;
+                    }
+                    fputc(' ', outputFile);
+
+                }
+
+                else {
+                    while (text[i] != ' ') {
+                        if (text[i] == '\0') {
+                            break;
+                        }
+                        i++;
+                        continue;
+                    }
+                }
+            }
+            fputc('\n', outputFile);
+        }
+        cout << "Готово! Результат сохранён в output.txt";
+        fclose(outputFile);
+        fclose(inputFile);
+    }
+}
