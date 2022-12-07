@@ -1,0 +1,462 @@
+// Лабораторная работа 5.
+// Написать программу, которая записывает с клавиатуры в файл структуру согласно выданному варианту задания. 
+// В качестве разделителя полей структуры использовать символ табуляции. В программе реализовать:
+// а) дополнение существующего массива структур новыми структурами;
+// б) поиск структуры с заданным значением выбранного элемента;
+// в) вывод на экран содержимого массива структур;
+// г) упорядочение массива структур по заданному полю(элементу), например государство по численности.
+// «Покупатель»: фамилия, имя, отчество, город, улица, номер дома, номер квартиры, номер кредитной карточки, код покупки. 
+#include <iostream>
+#include <Windows.h>
+
+using namespace std;
+
+struct Buyer {
+    char lastName[32];
+    char name[32];
+    char patronymic[32];
+    char city[32];
+    char street[32];
+    char creditCardNumber[32];
+    char houseNumber[32];
+    char roomNumber[32];
+    char buyCode[32];
+};
+
+struct Buyers {
+    Buyer buyer[100];
+};
+
+
+void addNewElement() {
+    FILE* databaseFile;
+    fopen_s(&databaseFile, "database.txt", "a");
+    Buyer buyer = {};
+
+    cout << "Введите фамилию:\n"; cin.getline(buyer.lastName, 32); system("cls");
+    cout << "Введите имя:\n"; cin.getline(buyer.name, 32); system("cls");
+    cout << "Введите отчество:\n"; cin.getline(buyer.patronymic, 32); system("cls");
+    cout << "Введите город:\n"; cin.getline(buyer.city, 32); system("cls");
+    cout << "Введите улицу:\n"; cin.getline(buyer.street, 32); system("cls");
+    cout << "Введите номер карточки:\n"; cin.getline(buyer.creditCardNumber, 32); system("cls");
+    cout << "Введите номер дома:\n"; cin.getline(buyer.houseNumber, 32); system("cls");
+    cout << "Введите номер квартиры:\n"; cin.getline(buyer.roomNumber, 32); system("cls");
+    cout << "Введите номер покупки:\n"; cin.getline(buyer.buyCode, 32); system("cls");
+
+    fputs(buyer.lastName, databaseFile); fputs("\t", databaseFile); 
+    fputs(buyer.name, databaseFile); fputs("\t", databaseFile);
+    fputs(buyer.patronymic, databaseFile); fputs("\t", databaseFile);
+    fputs(buyer.city, databaseFile); fputs("\t", databaseFile);
+    fputs(buyer.street, databaseFile); fputs("\t", databaseFile); 
+    fputs(buyer.creditCardNumber, databaseFile); fputs("\t", databaseFile);
+    fputs(buyer.houseNumber, databaseFile); fputs("\t", databaseFile);
+    fputs(buyer.roomNumber, databaseFile);  fputs("\t", databaseFile);
+    fputs(buyer.buyCode, databaseFile); fputs("\n", databaseFile);
+
+    fclose(databaseFile);
+    cout << "Новая запись была добавлена в базу данных.\n";
+}
+
+void printElemets() {
+    FILE* databaseFile;
+    fopen_s(&databaseFile, "database.txt", "r");
+
+    while (!feof(databaseFile)) {
+        Buyer buyer = {};
+        fscanf_s(
+            databaseFile, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+            buyer.lastName, 32, buyer.name, 32, buyer.patronymic, 32, buyer.city, 32, buyer.street, 32, 
+            buyer.creditCardNumber, 32, buyer.houseNumber, 32, buyer.roomNumber, 32, buyer.buyCode, 32
+        );
+        printf("%s %s %s %s %s %s %s %s %s\n", 
+            buyer.lastName, buyer.name, buyer.patronymic, buyer.city, buyer.street, 
+            buyer.creditCardNumber, buyer.houseNumber, buyer.roomNumber, buyer.buyCode
+        );
+    }
+    cout << "\n";
+    fclose(databaseFile);
+}
+
+void findElements() {
+    FILE* databaseFile;
+    fopen_s(&databaseFile, "database.txt", "r");
+    Buyers buyers = {};
+    
+    int counter = 0;
+    while (!feof(databaseFile)) {
+        fscanf_s(
+            databaseFile, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
+            buyers.buyer[counter].lastName, 32, buyers.buyer[counter].name, 32, buyers.buyer[counter].patronymic, 32,
+            buyers.buyer[counter].city, 32, buyers.buyer[counter].street, 32,
+            buyers.buyer[counter].creditCardNumber, 32, buyers.buyer[counter].houseNumber, 32, 
+            buyers.buyer[counter].roomNumber, 32, buyers.buyer[counter].buyCode, 32
+        );
+        counter++;
+    }
+    
+    // «Покупатель»: фамилия, имя, отчество, город, улица, номер дома, номер квартиры, номер кредитной карточки, код покупки. 
+    string action, meaning;
+    int findCounter = 0;
+    cout << "Укажите значение, которое нужно найти:\n";
+    cin >> meaning;
+    cout << "Выберите вариант для поиска:\n1) Фамилия\n2) Имя\n3) Отчество" <<
+        "\n4) Город\n5) Улица\n6) Номер карточки\n7) Номер квартиры\n8) Номер дома\n9) Код покупки\n";
+    cin >> action;
+    system("cls");
+    // LastName
+    if (action == "1") {
+        for (int i = 0; i < counter; i++) {
+            if (meaning == buyers.buyer[i].lastName) {
+                findCounter++;
+                printf("[%i] *%s* %s %s %s %s %s %s %s %s\n",
+                    i+1, buyers.buyer[i].lastName, buyers.buyer[i].name, buyers.buyer[i].patronymic, buyers.buyer[i].city, buyers.buyer[i].street,
+                    buyers.buyer[i].creditCardNumber, buyers.buyer[i].houseNumber, buyers.buyer[i].roomNumber, buyers.buyer[i].buyCode
+                );
+            }
+        }
+        cout << "Фамилий найдено: " << findCounter << "\n\n";
+    }
+    // Name
+    else if (action == "2") {
+        for (int i = 0; i < counter; i++) {
+            if (meaning == buyers.buyer[i].name) {
+                findCounter++;
+                printf("[%i] %s *%s* %s %s %s %s %s %s %s\n",
+                    i + 1, buyers.buyer[i].lastName, buyers.buyer[i].name, buyers.buyer[i].patronymic, buyers.buyer[i].city, buyers.buyer[i].street,
+                    buyers.buyer[i].creditCardNumber, buyers.buyer[i].houseNumber, buyers.buyer[i].roomNumber, buyers.buyer[i].buyCode
+                );
+            }
+        }
+        cout << "Имён найдено: " << findCounter << "\n\n";
+    }
+    // Patryonomic
+    else if (action == "3") {
+        for (int i = 0; i < counter; i++) {
+            if (meaning == buyers.buyer[i].patronymic) {
+                findCounter++;
+                printf("[%i] %s %s *%s* %s %s %s %s %s %s\n",
+                    i + 1, buyers.buyer[i].lastName, buyers.buyer[i].name, buyers.buyer[i].patronymic, buyers.buyer[i].city, buyers.buyer[i].street,
+                    buyers.buyer[i].creditCardNumber, buyers.buyer[i].houseNumber, buyers.buyer[i].roomNumber, buyers.buyer[i].buyCode
+                );
+            }
+        }
+        cout << "Отчеств найдено: " << findCounter << "\n\n";
+    }
+    // City
+    else if (action == "4") {
+        for (int i = 0; i < counter; i++) {
+            if (meaning == buyers.buyer[i].city) {
+                findCounter++;
+                printf("[%i] %s %s %s *%s* %s %s %s %s %s\n",
+                    i + 1, buyers.buyer[i].lastName, buyers.buyer[i].name, buyers.buyer[i].patronymic, buyers.buyer[i].city, buyers.buyer[i].street,
+                    buyers.buyer[i].creditCardNumber, buyers.buyer[i].houseNumber, buyers.buyer[i].roomNumber, buyers.buyer[i].buyCode
+                );
+            }
+        }
+        cout << "Городов найдено: " << findCounter << "\n\n";
+    }
+    // Street
+    else if (action == "5") {
+        for (int i = 0; i < counter; i++) {
+            if (meaning == buyers.buyer[i].street) {
+                findCounter++;
+                printf("[%i] %s %s %s %s *%s* %s %s %s %s\n",
+                    i + 1, buyers.buyer[i].lastName, buyers.buyer[i].name, buyers.buyer[i].patronymic, buyers.buyer[i].city, buyers.buyer[i].street,
+                    buyers.buyer[i].creditCardNumber, buyers.buyer[i].houseNumber, buyers.buyer[i].roomNumber, buyers.buyer[i].buyCode
+                );
+            }
+        }
+        cout << "Улиц найдено: " << findCounter << "\n\n";
+    }
+    // Credit card
+    else if (action == "6") {
+        for (int i = 0; i < counter; i++) {
+            if (meaning == buyers.buyer[i].creditCardNumber) {
+                findCounter++;
+                printf("[%i] %s %s %s %s %s *%s* %s %s %s\n",
+                    i + 1, buyers.buyer[i].lastName, buyers.buyer[i].name, buyers.buyer[i].patronymic, buyers.buyer[i].city, buyers.buyer[i].street,
+                    buyers.buyer[i].creditCardNumber, buyers.buyer[i].houseNumber, buyers.buyer[i].roomNumber, buyers.buyer[i].buyCode
+                );
+            }
+        }
+        cout << "Карточек найдено: " << findCounter << "\n\n";
+    }
+    // House number
+    else if (action == "7") {
+        for (int i = 0; i < counter; i++) {
+            if (meaning == buyers.buyer[i].houseNumber) {
+                findCounter++;
+                printf("[%i] %s %s %s %s %s %s *%s* %s %s\n",
+                    i + 1, buyers.buyer[i].lastName, buyers.buyer[i].name, buyers.buyer[i].patronymic, buyers.buyer[i].city, buyers.buyer[i].street,
+                    buyers.buyer[i].creditCardNumber, buyers.buyer[i].houseNumber, buyers.buyer[i].roomNumber, buyers.buyer[i].buyCode
+                );
+            }
+        }
+        cout << "Домов найдено: " << findCounter << "\n\n";
+    }
+    // Room
+    else if (action == "8") {
+        for (int i = 0; i < counter; i++) {
+            if (meaning == buyers.buyer[i].creditCardNumber) {
+                findCounter++;
+                printf("[%i] %s %s %s %s %s %s %s *%s* %s\n",
+                    i + 1, buyers.buyer[i].lastName, buyers.buyer[i].name, buyers.buyer[i].patronymic, buyers.buyer[i].city, buyers.buyer[i].street,
+                    buyers.buyer[i].creditCardNumber, buyers.buyer[i].houseNumber, buyers.buyer[i].roomNumber, buyers.buyer[i].buyCode
+                );
+            }
+        }
+        cout << "Комнат найдено: " << findCounter << "\n\n";
+    }
+    // Buy number
+    else if (action == "9") {
+        for (int i = 0; i < counter; i++) {
+            findCounter++;
+            if (meaning == buyers.buyer[i].buyCode) {
+                printf("[%i] %s %s %s %s %s %s %s %s *%s*\n",
+                    i + 1, buyers.buyer[i].lastName, buyers.buyer[i].name, buyers.buyer[i].patronymic, buyers.buyer[i].city, buyers.buyer[i].street,
+                    buyers.buyer[i].creditCardNumber, buyers.buyer[i].houseNumber, buyers.buyer[i].roomNumber, buyers.buyer[i].buyCode
+                );
+            }
+        }
+        cout << "Кодов найдено: " << findCounter << "\n\n";
+    }
+    else {
+        system("cls"); cout << "Действие не найдено!\n"; findElements();
+    }
+    fclose(databaseFile);
+
+}
+
+void sortElements() {
+    FILE* databaseFile;
+    fopen_s(&databaseFile, "database.txt", "r");
+    Buyers buyers = {};
+
+    int counter = 0;
+    while (!feof(databaseFile)) {
+        fscanf_s(
+            databaseFile, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
+            buyers.buyer[counter].lastName, 32, buyers.buyer[counter].name, 32, buyers.buyer[counter].patronymic, 32,
+            buyers.buyer[counter].city, 32, buyers.buyer[counter].street, 32,
+            buyers.buyer[counter].creditCardNumber, 32, buyers.buyer[counter].houseNumber, 32,
+            buyers.buyer[counter].roomNumber, 32, buyers.buyer[counter].buyCode, 32
+        );
+        counter++;
+    }
+
+
+    // «Покупатель»: фамилия, имя, отчество, город, улица, номер дома, номер квартиры, номер кредитной карточки, код покупки. 
+    string action;
+    cout << "Выберите вариант для сортировки:\n1) Фамилия\n2) Имя\n3) Отчество" <<
+        "\n4) Город\n5) Улица\n6) Номер карточки\n7) Номер дома\n8) Номер квартиры\n9) Код покупки\n";
+    cin >> action;
+    system("cls");
+    // LastName
+    if (action == "1") {
+        for (int i = 0; i < counter; i++) {
+            for (int j = 0; j < counter - i - 1; j++) {
+                if (buyers.buyer[j].lastName[0] > buyers.buyer[j + 1].lastName[0]) {
+                    Buyer temp = buyers.buyer[j];
+                    buyers.buyer[j] = buyers.buyer[j + 1];
+                    buyers.buyer[j + 1] = temp;
+                }
+            }
+        }
+        for (int i = 0; i < counter; i++) {
+            printf("*%s* %s %s %s %s %s %s %s %s\n",
+                buyers.buyer[i].lastName, buyers.buyer[i].name, buyers.buyer[i].patronymic, buyers.buyer[i].city, buyers.buyer[i].street,
+                buyers.buyer[i].creditCardNumber, buyers.buyer[i].houseNumber, buyers.buyer[i].roomNumber, buyers.buyer[i].buyCode
+            );
+        }
+        cout << "\n";
+    }
+    // Name
+    else if (action == "2") {
+        for (int i = 0; i < counter; i++) {
+            for (int j = 0; j < counter - i - 1; j++) {
+                if (buyers.buyer[j].name[0] > buyers.buyer[j + 1].name[0]) {
+                    Buyer temp = buyers.buyer[j];
+                    buyers.buyer[j] = buyers.buyer[j + 1];
+                    buyers.buyer[j + 1] = temp;
+                }
+            }
+        }
+        for (int i = 0; i < counter; i++) {
+            printf("%s *%s* %s %s %s %s %s %s %s\n",
+                buyers.buyer[i].lastName, buyers.buyer[i].name, buyers.buyer[i].patronymic, buyers.buyer[i].city, buyers.buyer[i].street,
+                buyers.buyer[i].creditCardNumber, buyers.buyer[i].houseNumber, buyers.buyer[i].roomNumber, buyers.buyer[i].buyCode
+            );
+        }
+        cout << "\n";
+    }
+    // Patryonomic
+    else if (action == "3") {
+        for (int i = 0; i < counter; i++) {
+            for (int j = 0; j < counter - i - 1; j++) {
+                if (buyers.buyer[j].patronymic[0] > buyers.buyer[j + 1].patronymic[0]) {
+                    Buyer temp = buyers.buyer[j];
+                    buyers.buyer[j] = buyers.buyer[j + 1];
+                    buyers.buyer[j + 1] = temp;
+                }
+            }
+        }
+        for (int i = 0; i < counter; i++) {
+            printf("%s %s *%s* %s %s %s %s %s %s\n",
+                buyers.buyer[i].lastName, buyers.buyer[i].name, buyers.buyer[i].patronymic, buyers.buyer[i].city, buyers.buyer[i].street,
+                buyers.buyer[i].creditCardNumber, buyers.buyer[i].houseNumber, buyers.buyer[i].roomNumber, buyers.buyer[i].buyCode
+            );
+        }
+        cout << "\n";
+    }
+    // City
+    else if (action == "4") {
+        for (int i = 0; i < counter; i++) {
+            for (int j = 0; j < counter - i - 1; j++) {
+                if (buyers.buyer[j].city[0] > buyers.buyer[j + 1].city[0]) {
+                    Buyer temp = buyers.buyer[j];
+                    buyers.buyer[j] = buyers.buyer[j + 1];
+                    buyers.buyer[j + 1] = temp;
+                }
+            }
+        }
+        for (int i = 0; i < counter; i++) {
+            printf("%s %s %s *%s* %s %s %s %s %s\n",
+                buyers.buyer[i].lastName, buyers.buyer[i].name, buyers.buyer[i].patronymic, buyers.buyer[i].city, buyers.buyer[i].street,
+                buyers.buyer[i].creditCardNumber, buyers.buyer[i].houseNumber, buyers.buyer[i].roomNumber, buyers.buyer[i].buyCode
+            );
+        }
+        cout << "\n";
+    }
+    // Street
+    else if (action == "5") {
+        for (int i = 0; i < counter; i++) {
+            for (int j = 0; j < counter - i - 1; j++) {
+                if (buyers.buyer[j].street[0] > buyers.buyer[j + 1].street[0]) {
+                    Buyer temp = buyers.buyer[j];
+                    buyers.buyer[j] = buyers.buyer[j + 1];
+                    buyers.buyer[j + 1] = temp;
+                }
+            }
+        }
+        for (int i = 0; i < counter; i++) {
+            printf("%s %s %s %s *%s* %s %s %s %s\n",
+                buyers.buyer[i].lastName, buyers.buyer[i].name, buyers.buyer[i].patronymic, buyers.buyer[i].city, buyers.buyer[i].street,
+                buyers.buyer[i].creditCardNumber, buyers.buyer[i].houseNumber, buyers.buyer[i].roomNumber, buyers.buyer[i].buyCode
+            );
+        }
+        cout << "\n";
+    }
+    // Credit card number
+    else if (action == "6") {
+        for (int i = 0; i < counter; i++) {
+            for (int j = 0; j < counter - i - 1; j++) {
+                if ((int)buyers.buyer[j].creditCardNumber[0] >(int)buyers.buyer[j + 1].creditCardNumber[0]) {
+                    Buyer temp = buyers.buyer[j];
+                    buyers.buyer[j] = buyers.buyer[j + 1];
+                    buyers.buyer[j + 1] = temp;
+                }
+            }
+        }
+        for (int i = 0; i < counter; i++) {
+            printf("%s %s %s %s %s *%s* %s %s %s\n",
+                buyers.buyer[i].lastName, buyers.buyer[i].name, buyers.buyer[i].patronymic, buyers.buyer[i].city, buyers.buyer[i].street,
+                buyers.buyer[i].creditCardNumber, buyers.buyer[i].houseNumber, buyers.buyer[i].roomNumber, buyers.buyer[i].buyCode
+            );
+        }
+        cout << "\n";
+    }
+    // House number
+    else if (action == "7") {
+        for (int i = 0; i < counter; i++) {
+            for (int j = 0; j < counter - i - 1; j++) {
+                if (buyers.buyer[j].houseNumber[0] > buyers.buyer[j + 1].houseNumber[0]) {
+                    Buyer temp = buyers.buyer[j];
+                    buyers.buyer[j] = buyers.buyer[j + 1];
+                    buyers.buyer[j + 1] = temp;
+                }
+            }
+        }
+        for (int i = 0; i < counter; i++) {
+            printf("%s *%s* %s %s %s %s *%s* %s %s\n",
+                buyers.buyer[i].lastName, buyers.buyer[i].name, buyers.buyer[i].patronymic, buyers.buyer[i].city, buyers.buyer[i].street,
+                buyers.buyer[i].creditCardNumber, buyers.buyer[i].houseNumber, buyers.buyer[i].roomNumber, buyers.buyer[i].buyCode
+            );
+        }
+        cout << "\n";
+    }
+    // Room number
+    else if (action == "8") {
+        for (int i = 0; i < counter - 1; i++) {
+            for (int j = 0; j < counter - i; j++) {
+                if (buyers.buyer[j].roomNumber[0] > buyers.buyer[j + 1].roomNumber[0]) {
+                    Buyer temp = buyers.buyer[j];
+                    buyers.buyer[j] = buyers.buyer[j + 1];
+                    buyers.buyer[j + 1] = temp;
+                }
+            }
+        }
+        for (int i = 0; i < counter; i++) {
+            printf("%s %s %s %s %s %s %s *%s* %s\n",
+                buyers.buyer[i].lastName, buyers.buyer[i].name, buyers.buyer[i].patronymic, buyers.buyer[i].city, buyers.buyer[i].street,
+                buyers.buyer[i].creditCardNumber, buyers.buyer[i].houseNumber, buyers.buyer[i].roomNumber, buyers.buyer[i].buyCode
+            );
+        }
+        cout << "\n";
+    }
+    // Buy number
+    else if (action == "9") {
+        for (int i = 0; i < counter; i++) {
+            for (int j = 0; j < counter - i - 1; j++) {
+                if (buyers.buyer[j].buyCode[0] > buyers.buyer[j + 1].buyCode[0]) {
+                    Buyer temp = buyers.buyer[j];
+                    buyers.buyer[j] = buyers.buyer[j + 1];
+                    buyers.buyer[j + 1] = temp;
+                }
+            }
+        }
+        for (int i = 0; i < counter; i++) {
+            printf("%s %s %s %s %s %s %s %s *%s*\n",
+                buyers.buyer[i].lastName, buyers.buyer[i].name, buyers.buyer[i].patronymic, buyers.buyer[i].city, buyers.buyer[i].street,
+                buyers.buyer[i].creditCardNumber, buyers.buyer[i].houseNumber, buyers.buyer[i].roomNumber, buyers.buyer[i].buyCode
+            );
+        }
+        cout << "\n";
+    }
+    else {
+        system("cls"); cout << "Действие не найдено!\n"; findElements();
+    }
+    fclose(databaseFile);
+
+}
+
+int main() {
+
+    SetConsoleOutputCP(1251);
+    SetConsoleCP(1251);
+
+
+    while (true) {
+
+        string action;
+        cout << "Выберите действие:\n1) Вывести содержимое базы данных\n2) Добавить новый элемент в базу данных\n" <<
+            "3) Отсортировать элементы по определённому параметру\n4) Найти значение по определённому элементу\n";
+        cin >> action;
+        cin.ignore();
+
+        if (action == "1") {
+            system("cls"); printElemets();
+        }
+        else if (action == "2") {
+            system("cls"); addNewElement();
+        }
+        else if (action == "3") {
+            system("cls"); sortElements();
+        }
+        else if (action == "4") {
+            system("cls"); findElements();
+        }
+        else {
+            system("cls"); cout << "Действие не найдено!\n";
+        }
+    }
+}
