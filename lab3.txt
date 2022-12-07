@@ -1,0 +1,50 @@
+// Лабораторная 3
+// Написать программу, которая во вводимом с клавиатуры тексте выберет слова, начинающиеся с гласной буквы, и выведет их на экран. 
+
+#include <iostream>
+#include <Windows.h>
+
+using namespace std;
+
+int main() {
+
+    SetConsoleOutputCP(1251);
+    SetConsoleCP(1251);
+
+    char text[1024];
+    cout << "Поддерживаются только русские и английские символы\nДля ввода доступно не более 1024 символов\nВведите текст: ";
+    cin.get(text, 1024);
+    cout << "Ответ." << endl;
+    for (int i = 0; i < 1024; i++) {
+        int temp = (int)text[i];
+        if (text[i] == '\0') {
+            break;
+        }
+        // -128 --- -97 (А-Я)   65 --- 90 (A-Z)
+        if ((temp <= -97 && temp >= -128) || (temp <= 90 && temp >= 65)) {
+
+            while (text[i] != ' ') {
+
+                if (text[i] == '\0') {
+                    break;
+                }
+                cout << text[i];
+                i++;
+            }
+
+            cout << " ";
+        }
+
+        else {
+            while (text[i] != ' ') {
+
+                if (text[i] == '\0') {
+                    break;
+                }
+                i++;
+                continue;
+            }
+        }
+
+    }
+}
