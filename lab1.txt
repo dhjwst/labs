@@ -1,0 +1,19 @@
+// Лабораторная 1
+// Перевести узлы в километры в час и выразить в метрах в секунду
+#include <iostream>
+#include <Windows.h>
+
+using namespace std;
+
+int main() {
+
+    SetConsoleOutputCP(1251);
+    SetConsoleCP(1251);
+
+    cout << "Введите количество узлов:";
+    cin >> knots;
+    // 1 узел = 1.852 км/ч
+    cout << "Ответ." << endl;
+    printf("%f км/ч, %f м/с", (float)knots * 1.852, ((float)knots * 1.852 * 1000.0) / 3600.0);
+
+}
