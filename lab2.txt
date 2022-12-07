@@ -1,0 +1,46 @@
+// Лабораторная 2
+// Написать программу,
+// которая вычисляет среднее арифметическое элементов массива без учета минимального и максимального элементов массива.
+// Массив и его длина вводятся пользователем.
+#include <iostream>
+#include <Windows.h>
+
+using namespace std;
+
+int main() {
+    
+    SetConsoleOutputCP(1251);
+    SetConsoleCP(1251);
+    
+    int charArrayLength;
+    cout << "Укажите количество элементов в массиве:";
+    cin >> charArrayLength;
+
+    // задание элементов в массив
+    int nums[charArrayLength];
+    for (int i = 0; i < charArrayLength; i++) {
+        cout << "Введите число для элемента №" << i+1 << ":";
+        cin >> nums[i];
+    }
+
+    // поиск минимального и максимального элемента
+    int minElement = nums[0], maxElement = nums[0];
+    for (int i = 0; i < charArrayLength; i++) {
+        if (nums[i] < minElement) {
+            minElement = nums[i];
+        }
+        if (nums[i] > maxElement) {
+            maxElement = nums[i];
+        }
+    }
+
+    int sum, counter;
+    for (int i = 0; i < charArrayLength; i++) {
+        if (nums[i] != minElement && nums[i] != maxElement) {
+            counter++;
+            sum += nums[i];
+        }
+    }
+
+    cout << "Ответ." << endl << double(sum) / double(counter);
+}
